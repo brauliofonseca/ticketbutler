@@ -4,11 +4,18 @@ import {
    BrowserRouter as Router,
    useRoutes
 } from 'react-router-dom'
-
-import './index.css'
-
+import { ChakraProvider } from '@chakra-ui/react'
+import { DAppProvider, Config, Goerli, Localhost } from '@usedapp/core'
+import { getDefaultProvider } from 'ethers'
 import routes from '~react-pages'
 
+
+const config: Config = {
+	readOnlyChainId: Localhost.chainId,
+	readOnlyUrls: {
+		[Localhost.chainId]: 'http://127.0.0.1:8545'
+	}
+}
 
 const App = () => {
 	return (
@@ -23,7 +30,11 @@ const app = createRoot(document.getElementById('root') as HTMLElement)
 app.render(
 	<StrictMode>
 		<Router>
-			 <App />
+			<ChakraProvider>
+				<DAppProvider config={config} >
+					<App />
+				</DAppProvider>
+			</ChakraProvider>
 		</Router>
-  </StrictMode>,
+	</StrictMode>,
 )
